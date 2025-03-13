@@ -1,4 +1,13 @@
-<?php require_once './functions.php' ?>
+<?php
+require_once './functions.php';
+session_start();
+
+if (isset($_GET['pswd-len']) && is_numeric($_GET['pswd-len']) && (int) $_GET['pswd-len'] > 0 && (int) $_GET['pswd-len'] <= 100) {
+    $_SESSION['password'] = generatePassword((int) $_GET['pswd-len']);
+
+    header('Location: ./result.php');
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -17,13 +26,13 @@
     <h2 class="text-3xl text-center text-white font-semibold">Genera una password sicura</h2>
     <main class="max-w-2xl mx-auto">
 
-        <!-- output -->
+        <!-- output
         <div class="my-2 p-4 bg-cyan-100 rounded-md text-cyan-800">
             <?php echo (isset($_GET['pswd-len']) && is_numeric($_GET['pswd-len'])) ? generatePassword((int) $_GET['pswd-len']) : "Nessun parametro valido inserito" ?>
-        </div>
+        </div> -->
 
         <!-- form -->
-        <form action="index.php" class="bg-white rounded-md p-4">
+        <form method="GET" class="bg-white rounded-md p-4 my-2">
             <div class="flex justify-between items-center">
                 <label for="pswd-len">Lunghezza password:</label>
                 <input id="pswd-len" name="pswd-len" class="p-2 rounded-sm border border-slate-400" type="number"
