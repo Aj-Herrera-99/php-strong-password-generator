@@ -2,7 +2,9 @@
 require_once './functions.php';
 session_start();
 
-if (isset($_GET['pswd-len']) && is_numeric($_GET['pswd-len']) && (int) $_GET['pswd-len'] >= 8 && (int) $_GET['pswd-len'] <= 100) {
+if (isset($_GET['pswd-len']) && is_numeric($_GET['pswd-len']) && (int) $_GET['pswd-len'] >= 8 && (int) $_GET['pswd-len'] <= 70) {
+
+    $length = (int) $_GET['pswd-len'];
 
     $with_repetition = true;
     if (isset($_GET['repetition']) && $_GET['repetition'] == "no") {
@@ -10,21 +12,21 @@ if (isset($_GET['pswd-len']) && is_numeric($_GET['pswd-len']) && (int) $_GET['ps
     }
 
     $with_letters = true;
-    if (!isset($_GET['letters'])) {
+    if (!isset($_GET['letters']) || (isset($_GET['letters']) && $_GET['letters'] != "on")) {
         $with_letters = false;
     }
     $with_numbers = true;
-    if (!isset($_GET['numbers'])) {
+    if (!isset($_GET['numbers']) || (isset($_GET['numbers']) && $_GET['numbers'] != "on")) {
         $with_numbers = false;
     }
     $with_symbols = true;
-    if (!isset($_GET['symbols'])) {
+    if (!isset($_GET['symbols']) || (isset($_GET['symbols']) && $_GET['symbols'] != "on")) {
         $with_symbols = false;
     }
 
 
     if ($with_letters || $with_letters || $with_symbols) {
-        $_SESSION['password'] = generatePassword((int) $_GET['pswd-len'], $with_repetition, $with_letters, $with_numbers, $with_symbols);
+        $_SESSION['password'] = generatePassword($length, $with_repetition, $with_letters, $with_numbers, $with_symbols);
         header('Location: ./result.php');
     }
 }
@@ -52,7 +54,7 @@ if (isset($_GET['pswd-len']) && is_numeric($_GET['pswd-len']) && (int) $_GET['ps
             <div class="flex justify-between items-center">
                 <label for="pswd-len">Lunghezza password:</label>
                 <input id="pswd-len" name="pswd-len" class="p-2 rounded-sm border border-slate-400" type="number"
-                    min="8" max="100" value="8">
+                    min="8" max="70" value="8">
             </div>
             <div class="flex justify-between">
                 <p>Consenti ripetizioni di uno o più caratteri:</p>
