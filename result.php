@@ -15,7 +15,7 @@ $password = $_SESSION["password"];
 
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 
-    <title>Document</title>
+    <title>Risultato password</title>
 </head>
 
 <body class="min-h-screen bg-[#001731]">

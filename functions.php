@@ -1,13 +1,15 @@
 <?php
-function generatePassword(int $length, bool $with_repetition): string
+function generatePassword(int $length, bool $with_repetition, bool $with_letters, bool $with_numbers, bool $with_symbols): string
 {
+    // controlli aggiuntivi x sicurezza
     if ($length <= 0) return "Nessun parametro valido inserito";
+    if (!($with_letters || $with_letters || $with_symbols)) return "Nessun parametro valido inserito";
 
     // possibili caratteri di una password
-    $lc_letters = 'abcdefghijklmnopqrstuvwxyz';
-    $uc_letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $numbers = '0123456789';
-    $symbols = '!$%&?@#+';
+    $lc_letters = $with_letters ? 'abcdefghijklmnopqrstuvwxyz' : '';
+    $uc_letters = $with_letters ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' : '';
+    $numbers = $with_numbers ? '0123456789' : '';
+    $symbols = $with_symbols ? '!$%&?@#+' : '';
 
     $pswd_chars =
         $lc_letters .

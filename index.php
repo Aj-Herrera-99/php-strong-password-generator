@@ -2,14 +2,31 @@
 require_once './functions.php';
 session_start();
 
-if (isset($_GET['pswd-len']) && is_numeric($_GET['pswd-len']) && (int) $_GET['pswd-len'] > 0 && (int) $_GET['pswd-len'] <= 100) {
+if (isset($_GET['pswd-len']) && is_numeric($_GET['pswd-len']) && (int) $_GET['pswd-len'] >= 8 && (int) $_GET['pswd-len'] <= 100) {
+
     $with_repetition = true;
-    if (isset($_GET['repetition']) && $_GET['repetition'] == "no"){
+    if (isset($_GET['repetition']) && $_GET['repetition'] == "no") {
         $with_repetition = false;
     }
-    $_SESSION['password'] = generatePassword((int) $_GET['pswd-len'], $with_repetition);
 
-    header('Location: ./result.php');
+    $with_letters = true;
+    if (!isset($_GET['letters'])) {
+        $with_letters = false;
+    }
+    $with_numbers = true;
+    if (!isset($_GET['numbers'])) {
+        $with_numbers = false;
+    }
+    $with_symbols = true;
+    if (!isset($_GET['symbols'])) {
+        $with_symbols = false;
+    }
+
+
+    if ($with_letters || $with_letters || $with_symbols) {
+        $_SESSION['password'] = generatePassword((int) $_GET['pswd-len'], $with_repetition, $with_letters, $with_numbers, $with_symbols);
+        header('Location: ./result.php');
+    }
 }
 ?>
 
@@ -35,7 +52,7 @@ if (isset($_GET['pswd-len']) && is_numeric($_GET['pswd-len']) && (int) $_GET['ps
             <div class="flex justify-between items-center">
                 <label for="pswd-len">Lunghezza password:</label>
                 <input id="pswd-len" name="pswd-len" class="p-2 rounded-sm border border-slate-400" type="number"
-                    min="1" max="100">
+                    min="8" max="100" value="8">
             </div>
             <div class="flex justify-between">
                 <p>Consenti ripetizioni di uno o più caratteri:</p>
@@ -47,6 +64,23 @@ if (isset($_GET['pswd-len']) && is_numeric($_GET['pswd-len']) && (int) $_GET['ps
                     <div class="flex items-center gap-1">
                         <input id="repetition-no" name="repetition" type="radio" value="no">
                         <label for="repetition-no">No</label>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-between">
+                <div></div>
+                <div class="flex flex-col">
+                    <div class="flex items-center gap-1">
+                        <input id="letters" name="letters" type="checkbox" checked>
+                        <label for="letters">Lettere</label>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <input id="numbers" name="numbers" type="checkbox" checked>
+                        <label for="numbers">Numeri</label>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <input id="symbols" name="symbols" type="checkbox" checked>
+                        <label for="symbols">Simboli</label>
                     </div>
                 </div>
             </div>
